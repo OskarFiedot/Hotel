@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hotel.Cmd.Infrastructure\Hotel.Cmd.Infrastructure.csproj" />
+    <ProjectReference Include="..\Hotel.Cmd.Domain\Hotel.Cmd.Domain.csproj" />
+    <ProjectReference Include="..\..\Hotel.Common\Hotel.Common.csproj" />
+    <ProjectReference Include="..\..\CQRS-ES\CQRS.Core\CQRS.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
