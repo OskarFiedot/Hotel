@@ -6,7 +6,7 @@ namespace Hotel.Cmd.Domain.Aggregates;
 public class ReservationAggregate : AggregateRoot
 {
     public bool Active { get; set; }
-    
+
     private string _user;
 
     public ReservationAggregate() { }

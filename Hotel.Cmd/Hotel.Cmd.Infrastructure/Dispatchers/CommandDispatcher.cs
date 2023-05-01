@@ -1,25 +1,28 @@
-namespace Hotel.Cmd.Infrastructure.Dispatchers;
-using System;
-using System.Threading.Tasks;
 using CQRS.Core.Commands;
 using CQRS.Core.Infrastructure;
+
+namespace Hotel.Cmd.Infrastructure.Dispatchers;
 
 class CommandDispatcher : ICommandDispatcher
 {
     private readonly Dictionary<Type, Func<BaseCommand, Task>> _handlers = new();
-    public void RegisterHandler<T>(Func<T, Task> handler) where T : BaseCommand
+
+    public void RegisterHandler<T>(Func<T, Task> handler)
+        where T : BaseCommand
     {
         if (_handlers.ContainsKey(typeof(T)))
         {
-            throw new IndexOutOfRangeException("You cannot register the same command handler twice.");
+            throw new IndexOutOfRangeException(
+                "You cannot register the same command handler twice."
+            );
         }
 
-        _handlers.Add(typeof(T), x => handler((T) x));
+        _handlers.Add(typeof(T), x => handler((T)x));
     }
 
     public async Task SendAsync(BaseCommand command)
     {
-        if (_handlers.TryGetValue(command.GetType(), out Func<BaseCommand, Task>? handler))
+        if (_handlers.TryGetValue(command.GetType(), out Func<BaseCommand, Task> handler))
         {
             await handler(command);
         }

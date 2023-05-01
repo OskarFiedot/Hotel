@@ -1,11 +1,11 @@
-namespace Hotel.Common.Events;
 using CQRS.Core.Events;
+
+namespace Hotel.Common.Events;
 
 public class HotelReservedEvent : BaseEvent
 {
-    public HotelReservedEvent() : base(nameof(HotelReservedEvent))
-    {
-    }
+    public HotelReservedEvent()
+        : base(nameof(HotelReservedEvent)) { }
 
     public string User { get; set; }
     public DateTime StartDate { get; set; }

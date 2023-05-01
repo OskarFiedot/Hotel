@@ -1,9 +1,9 @@
-namespace Hotel.Common.Events;
 using CQRS.Core.Events;
+
+namespace Hotel.Common.Events;
 
 public class ReservationCancelledEvent : BaseEvent
 {
-    public ReservationCancelledEvent() : base(nameof(ReservationCancelledEvent))
-    {
-    }
+    public ReservationCancelledEvent()
+        : base(nameof(ReservationCancelledEvent)) { }
 }

@@ -24,7 +24,7 @@ public class EventStoreRepository : IEventStoreRepository
             .ToListAsync()
             .ConfigureAwait(false);
     }
- 
+
     public async Task SaveAsync(EventModel @event)
     {
         await _eventStoreCollection.InsertOneAsync(@event).ConfigureAwait(false);

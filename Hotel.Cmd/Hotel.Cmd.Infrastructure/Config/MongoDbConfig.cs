@@ -19,4 +19,11 @@ public class MongoDbConfig
         Database = database;
         Collection = collection;
     }
+
+    public MongoDbConfig(string connectionString, string database, string collection)
+    {
+        ConnectionString = connectionString;
+        Database = database;
+        Collection = collection;
+    }
 }

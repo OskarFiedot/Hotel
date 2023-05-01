@@ -1,5 +1,6 @@
-namespace Hotel.Cmd.Commands;
 using CQRS.Core.Commands;
+
+namespace Hotel.Cmd.Commands;
 
 class ReserveHotelCommand : BaseCommand
 {
