@@ -1,10 +1,13 @@
-﻿using Hotel.Cmd.Commands;
+﻿using Confluent.Kafka;
+using Hotel.Cmd.Commands;
 using Hotel.Cmd.Infrastructure.Config;
 using Hotel.Cmd.Infrastructure.Dispatchers;
 using Hotel.Cmd.Infrastructure.Handlers;
+using Hotel.Cmd.Infrastructure.Producers;
 using Hotel.Cmd.Infrastructure.Repositories;
 using Hotel.Cmd.Infrastructure.Stores;
 
+// MongoDB Event Store configs
 string mongoUser = GetEnv("MONGO_USER");
 string mongoPasswd = GetEnv("MONGO_PASSWORD");
 string mongoHost = GetEnv("MONGO_HOST");
@@ -12,9 +15,17 @@ string mongoPort = GetEnv("MONGO_PORT");
 string mongoDb = GetEnv("MONGO_DATABASE");
 string mongoColl = GetEnv("MONGO_COLLECTION");
 
+// Kafka configs
+string kafkaHost = GetEnv("KAFKA_HOST");
+string kafkaPort = GetEnv("KAFKA_PORT");
+
 MongoDbConfig mongoConfig = new(mongoUser, mongoPasswd, mongoHost, mongoPort, mongoDb, mongoColl);
 EventStoreRepository eventStoreRepo = new(mongoConfig);
-EventStore eventStore = new(eventStoreRepo);
+
+var kafkaConfig = new ProducerConfig { BootstrapServers = $"{kafkaHost}:{kafkaPort}" };
+EventProducer eventProducer = new(kafkaConfig);
+
+EventStore eventStore = new(eventStoreRepo, eventProducer);
 EventSourcingHandler esHandler = new(eventStore);
 CommandHandler commandHandler = new(esHandler);
 
