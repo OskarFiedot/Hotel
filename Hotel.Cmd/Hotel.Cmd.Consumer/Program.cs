@@ -1,18 +1,28 @@
-﻿using Hotel.Cmd.Infrastructure.Config;
+﻿using Hotel.Cmd.Commands;
+using Hotel.Cmd.Infrastructure.Config;
+using Hotel.Cmd.Infrastructure.Dispatchers;
+using Hotel.Cmd.Infrastructure.Handlers;
 using Hotel.Cmd.Infrastructure.Repositories;
 using Hotel.Cmd.Infrastructure.Stores;
 
-string mongo_user = GetEnv("MONGO_USER");
-string mongo_passwd = GetEnv("MONGO_PASSWORD");
-string mongo_host = GetEnv("MONGO_HOST");
-string mongo_port = GetEnv("MONGO_PORT");
-string mongo_db = GetEnv("MONGO_DATABASE");
-string mongo_coll = GetEnv("MONGO_COLLECTION");
+string mongoUser = GetEnv("MONGO_USER");
+string mongoPasswd = GetEnv("MONGO_PASSWORD");
+string mongoHost = GetEnv("MONGO_HOST");
+string mongoPort = GetEnv("MONGO_PORT");
+string mongoDb = GetEnv("MONGO_DATABASE");
+string mongoColl = GetEnv("MONGO_COLLECTION");
 
-MongoDbConfig mongo_config =
-    new(mongo_user, mongo_passwd, mongo_host, mongo_port, mongo_db, mongo_coll);
-EventStoreRepository mongo_repo = new(mongo_config);
-EventStore mongo_es = new(mongo_repo);
+MongoDbConfig mongoConfig = new(mongoUser, mongoPasswd, mongoHost, mongoPort, mongoDb, mongoColl);
+EventStoreRepository eventStoreRepo = new(mongoConfig);
+EventStore eventStore = new(eventStoreRepo);
+EventSourcingHandler esHandler = new(eventStore);
+CommandHandler commandHandler = new(esHandler);
+
+// Register command handler methods
+CommandDispatcher dispatcher = new();
+dispatcher.RegisterHandler<ReserveHotelCommand>(commandHandler.HandleAsync);
+dispatcher.RegisterHandler<EditReservationCommand>(commandHandler.HandleAsync);
+dispatcher.RegisterHandler<CancelReservationCommand>(commandHandler.HandleAsync);
 
 string GetEnv(string envName)
 {

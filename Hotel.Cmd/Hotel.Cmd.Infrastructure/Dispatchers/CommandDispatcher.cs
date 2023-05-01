@@ -3,7 +3,7 @@ using CQRS.Core.Infrastructure;
 
 namespace Hotel.Cmd.Infrastructure.Dispatchers;
 
-class CommandDispatcher : ICommandDispatcher
+public class CommandDispatcher : ICommandDispatcher
 {
     private readonly Dictionary<Type, Func<BaseCommand, Task>> _handlers = new();
 

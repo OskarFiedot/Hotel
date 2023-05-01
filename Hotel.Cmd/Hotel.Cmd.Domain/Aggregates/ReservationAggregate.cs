@@ -43,6 +43,47 @@ public class ReservationAggregate : AggregateRoot
         _user = @event.User;
     }
 
+    public void EditReservation(
+        DateTime startDate,
+        DateTime endDate,
+        float totalPrice,
+        List<Guid> roomReserved
+    )
+    {
+        if (!Active)
+        {
+            throw new InvalidOperationException("You cannot edit an inactive reservation.");
+        }
+
+        if (totalPrice < 0)
+        {
+            throw new ArgumentException($"The {totalPrice} variable must be greater than 0.");
+        }
+
+        if (roomReserved == null || roomReserved.Count < 1)
+        {
+            throw new ArgumentException(
+                $"The variable {roomReserved} must contain at least one element."
+            );
+        }
+
+        RaiseEvent(
+            new ReservationEditedEvent
+            {
+                Id = this.Id,
+                StartDate = startDate,
+                EndDate = endDate,
+                TotalPrice = totalPrice,
+                RoomReserved = roomReserved
+            }
+        );
+    }
+
+    public void Apply(ReservationEditedEvent @event)
+    {
+        Id = @event.Id;
+    }
+
     public void CancelReservation(string username)
     {
         if (!Active)
