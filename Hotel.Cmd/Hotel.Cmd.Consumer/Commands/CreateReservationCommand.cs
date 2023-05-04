@@ -2,8 +2,10 @@ using CQRS.Core.Commands;
 
 namespace Hotel.Cmd.Commands;
 
-class EditReservationCommand : BaseCommand
+class CreateReservationCommand : BaseCommand
 {
+    public string User { get; set; }
+    public Guid TripId { get; set; }
     public int NumberOfAdults { get; set; }
     public int NumberOfChildrenUpTo3yo { get; set; }
     public int NumberOfChildrenUpTo10yo { get; set; }

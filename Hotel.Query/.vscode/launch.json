@@ -22,7 +22,11 @@
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development",
                 "ASPNETCORE_URLS": "http://localhost:5011",
-                "KAFKA_TOPIC": "HotelReservationEvents"
+                "KAFKA_TOPIC": "HotelReservationEvents",
+                "POSTGRES_HOST": "localhost",
+                "POSTGRES_USER": "postgres",
+                "POSTGRES_PASSWORD": "123",
+                "POSTGRES_DATABASE": "HotelDB"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"

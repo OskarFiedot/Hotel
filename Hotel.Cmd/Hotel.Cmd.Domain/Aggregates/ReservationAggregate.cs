@@ -14,29 +14,37 @@ public class ReservationAggregate : AggregateRoot
     public ReservationAggregate(
         Guid id,
         string user,
+        Guid tripId,
+        int numberOfAdults,
+        int numberOfChildrenUpTo3yo,
+        int numberOfChildrenUpTo10yo,
+        int numberOfChildrenUpTo18yo,
         DateTime startDate,
-        DateTime endDate,
-        float totalPrice,
-        Guid hotel_id,
-        List<Guid> roomReserved
+        int duration,
+        string placeOfDeparture,
+        float totalPrice
     )
     {
         RaiseEvent(
-            new HotelReservedEvent
+            new ReservationCreatedEvent
             {
                 Id = id,
                 User = user,
+                TripId = tripId,
+                NumberOfAdults = numberOfAdults,
+                NumberOfChildrenUpTo10yo = numberOfChildrenUpTo10yo,
+                NumberOfChildrenUpTo18yo = numberOfChildrenUpTo18yo,
+                NumberOfChildrenUpTo3yo = numberOfChildrenUpTo3yo,
                 StartDate = startDate,
-                EndDate = endDate,
+                Duration = duration,
+                PlaceOfDeparture = placeOfDeparture,
                 TotalPrice = totalPrice,
-                Hotel = hotel_id,
-                RoomReserved = roomReserved,
                 DateReserved = DateTime.Now
             }
         );
     }
 
-    public void Apply(HotelReservedEvent @event)
+    public void Apply(ReservationCreatedEvent @event)
     {
         Id = @event.Id;
         Active = true;
@@ -44,10 +52,14 @@ public class ReservationAggregate : AggregateRoot
     }
 
     public void EditReservation(
+        int numberOfAdults,
+        int numberOfChildrenUpTo3yo,
+        int numberOfChildrenUpTo10yo,
+        int numberOfChildrenUpTo18yo,
         DateTime startDate,
-        DateTime endDate,
-        float totalPrice,
-        List<Guid> roomReserved
+        int duration,
+        string placeOfDeparture,
+        float totalPrice
     )
     {
         if (!Active)
@@ -55,26 +67,19 @@ public class ReservationAggregate : AggregateRoot
             throw new InvalidOperationException("You cannot edit an inactive reservation.");
         }
 
-        if (totalPrice < 0)
-        {
-            throw new ArgumentException($"The {totalPrice} variable must be greater than 0.");
-        }
-
-        if (roomReserved == null || roomReserved.Count < 1)
-        {
-            throw new ArgumentException(
-                $"The variable {roomReserved} must contain at least one element."
-            );
-        }
-
         RaiseEvent(
             new ReservationEditedEvent
             {
-                Id = this.Id,
+                Id = Id,
+                DateUpdated = DateTime.Now,
+                Duration = duration,
+                NumberOfAdults = numberOfAdults,
+                NumberOfChildrenUpTo10yo = numberOfChildrenUpTo10yo,
+                NumberOfChildrenUpTo18yo = numberOfChildrenUpTo18yo,
+                NumberOfChildrenUpTo3yo = numberOfChildrenUpTo3yo,
+                PlaceOfDeparture = placeOfDeparture,
                 StartDate = startDate,
-                EndDate = endDate,
-                TotalPrice = totalPrice,
-                RoomReserved = roomReserved
+                TotalPrice = totalPrice
             }
         );
     }

@@ -31,7 +31,7 @@ CommandHandler commandHandler = new(esHandler);
 
 // Register command handler methods
 CommandDispatcher dispatcher = new();
-dispatcher.RegisterHandler<ReserveHotelCommand>(commandHandler.HandleAsync);
+dispatcher.RegisterHandler<CreateReservationCommand>(commandHandler.HandleAsync);
 dispatcher.RegisterHandler<EditReservationCommand>(commandHandler.HandleAsync);
 dispatcher.RegisterHandler<CancelReservationCommand>(commandHandler.HandleAsync);
 
