@@ -43,8 +43,7 @@ public class CityRepository : ICityRepository
 
         return await context.Cities
             .Include(c => c.Country)
-            .Include(c => c.Departures)
-            .Include(c => c.Trips)
+            .Include(c => c.Hotels)
             .FirstOrDefaultAsync(c => c.Id == cityId);
     }
 
@@ -56,9 +55,7 @@ public class CityRepository : ICityRepository
             .AsNoTracking()
             .Include(c => c.Country)
             .AsNoTracking()
-            .Include(c => c.Departures)
-            .AsNoTracking()
-            .Include(c => c.Trips)
+            .Include(c => c.Hotels)
             .AsNoTracking()
             .ToListAsync();
     }
@@ -71,27 +68,9 @@ public class CityRepository : ICityRepository
             .AsNoTracking()
             .Include(c => c.Country)
             .AsNoTracking()
-            .Include(c => c.Departures)
-            .AsNoTracking()
-            .Include(c => c.Trips)
+            .Include(c => c.Hotels)
             .AsNoTracking()
             .Where(c => c.Country.Name.Contains(country))
-            .ToListAsync();
-    }
-
-    public async Task<List<CityEntity>> ListByDepartureAsync(string destination)
-    {
-        using DatabaseContext context = _contextFactory.CreateDbContext();
-
-        return await context.Cities
-            .AsNoTracking()
-            .Include(c => c.Country)
-            .AsNoTracking()
-            .Include(c => c.Departures)
-            .AsNoTracking()
-            .Include(c => c.Trips)
-            .AsNoTracking()
-            .Where(c => c.Departures.Any(d => d.Trip.City.Name.Contains(destination)))
             .ToListAsync();
     }
 

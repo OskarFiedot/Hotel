@@ -14,15 +14,11 @@ public class ReservationAggregate : AggregateRoot
     public ReservationAggregate(
         Guid id,
         string user,
-        Guid tripId,
-        int numberOfAdults,
-        int numberOfChildrenUpTo3yo,
-        int numberOfChildrenUpTo10yo,
-        int numberOfChildrenUpTo18yo,
         DateTime startDate,
-        int duration,
-        string placeOfDeparture,
-        float totalPrice
+        DateTime endDate,
+        float totalPrice,
+        Guid hotel_id,
+        List<Guid> roomReserved
     )
     {
         RaiseEvent(
@@ -30,15 +26,11 @@ public class ReservationAggregate : AggregateRoot
             {
                 Id = id,
                 User = user,
-                TripId = tripId,
-                NumberOfAdults = numberOfAdults,
-                NumberOfChildrenUpTo10yo = numberOfChildrenUpTo10yo,
-                NumberOfChildrenUpTo18yo = numberOfChildrenUpTo18yo,
-                NumberOfChildrenUpTo3yo = numberOfChildrenUpTo3yo,
                 StartDate = startDate,
-                Duration = duration,
-                PlaceOfDeparture = placeOfDeparture,
+                EndDate = endDate,
                 TotalPrice = totalPrice,
+                Hotel = hotel_id,
+                RoomReserved = roomReserved,
                 DateReserved = DateTime.Now
             }
         );
@@ -52,14 +44,10 @@ public class ReservationAggregate : AggregateRoot
     }
 
     public void EditReservation(
-        int numberOfAdults,
-        int numberOfChildrenUpTo3yo,
-        int numberOfChildrenUpTo10yo,
-        int numberOfChildrenUpTo18yo,
         DateTime startDate,
-        int duration,
-        string placeOfDeparture,
-        float totalPrice
+        DateTime endDate,
+        float totalPrice,
+        List<Guid> roomReserved
     )
     {
         if (!Active)
@@ -70,16 +58,12 @@ public class ReservationAggregate : AggregateRoot
         RaiseEvent(
             new ReservationEditedEvent
             {
-                Id = Id,
-                DateUpdated = DateTime.Now,
-                Duration = duration,
-                NumberOfAdults = numberOfAdults,
-                NumberOfChildrenUpTo10yo = numberOfChildrenUpTo10yo,
-                NumberOfChildrenUpTo18yo = numberOfChildrenUpTo18yo,
-                NumberOfChildrenUpTo3yo = numberOfChildrenUpTo3yo,
-                PlaceOfDeparture = placeOfDeparture,
+                Id = this.Id,
                 StartDate = startDate,
-                TotalPrice = totalPrice
+                EndDate = endDate,
+                TotalPrice = totalPrice,
+                RoomReserved = roomReserved,
+                DateEdited = DateTime.Now
             }
         );
     }

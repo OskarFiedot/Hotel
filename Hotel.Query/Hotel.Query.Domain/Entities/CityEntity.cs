@@ -13,6 +13,5 @@ public class CityEntity
 
     [System.Text.Json.Serialization.JsonIgnore]
     public virtual CountryEntity Country { get; set; } = null!;
-    public virtual List<TripEntity> Trips { get; } = new();
-    public virtual List<PlaceOfDepartureEntity> Departures { get; } = new();
+    public virtual List<HotelEntity> Hotels { get; } = new();
 }

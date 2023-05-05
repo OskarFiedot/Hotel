@@ -5,31 +5,23 @@
             // Use IntelliSense to find out which attributes exist for C# debugging
             // Use hover for the description of the existing attributes
             // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
-            "name": ".NET Core Launch (web)",
+            "name": ".NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Hotel.Query.Api/bin/Debug/net7.0/Hotel.Query.Api.dll",
+            "program": "${workspaceFolder}/Hotel.Query.Consumer/bin/Debug/net7.0/Hotel.Query.Consumer.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Hotel.Query.Api",
+            "cwd": "${workspaceFolder}/Hotel.Query.Consumer",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "internalConsole",
             "stopAtEntry": false,
-            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-            },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development",
-                "ASPNETCORE_URLS": "http://localhost:5011",
                 "KAFKA_TOPIC": "HotelReservationEvents",
                 "POSTGRES_HOST": "localhost",
                 "POSTGRES_USER": "postgres",
                 "POSTGRES_PASSWORD": "123",
                 "POSTGRES_DATABASE": "HotelDB"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
             }
         },
         {

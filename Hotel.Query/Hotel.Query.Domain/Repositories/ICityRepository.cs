@@ -10,5 +10,4 @@ public interface ICityRepository
     Task<CityEntity> GetByIdAsync(Guid cityId);
     Task<List<CityEntity>> ListAllAsync();
     Task<List<CityEntity>> ListByCountryAsync(string country);
-    Task<List<CityEntity>> ListByDepartureAsync(string destination);
 }

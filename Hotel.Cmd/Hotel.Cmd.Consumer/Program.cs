@@ -7,6 +7,18 @@ using Hotel.Cmd.Infrastructure.Producers;
 using Hotel.Cmd.Infrastructure.Repositories;
 using Hotel.Cmd.Infrastructure.Stores;
 
+string GetEnv(string envName)
+{
+    string envValue = Environment.GetEnvironmentVariable(envName);
+
+    if (string.IsNullOrEmpty(envValue))
+    {
+        throw new Exception($"{envName} environment variable is not set.");
+    }
+
+    return envValue;
+}
+
 // MongoDB Event Store configs
 string mongoUser = GetEnv("MONGO_USER");
 string mongoPasswd = GetEnv("MONGO_PASSWORD");
@@ -34,15 +46,3 @@ CommandDispatcher dispatcher = new();
 dispatcher.RegisterHandler<CreateReservationCommand>(commandHandler.HandleAsync);
 dispatcher.RegisterHandler<EditReservationCommand>(commandHandler.HandleAsync);
 dispatcher.RegisterHandler<CancelReservationCommand>(commandHandler.HandleAsync);
-
-string GetEnv(string envName)
-{
-    string envValue = Environment.GetEnvironmentVariable(envName);
-
-    if (string.IsNullOrEmpty(envValue))
-    {
-        throw new Exception($"{envName} environment variable is not set.");
-    }
-
-    return envValue;
-}

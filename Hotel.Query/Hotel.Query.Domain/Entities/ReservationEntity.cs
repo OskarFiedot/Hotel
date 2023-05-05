@@ -9,11 +9,11 @@ public class ReservationEntity
     [Key]
     public Guid Id { get; set; }
     public string User { get; set; }
-    public Guid TripDateId { get; set; }
-
-    [System.Text.Json.Serialization.JsonIgnore]
-    public virtual TripDateEntity TripDate { get; set; } = null!;
-    public float TotalPrice { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
     public DateTime DateCreated { get; set; }
     public DateTime DateUpdated { get; set; }
+    public virtual List<RoomEntity> Rooms { get; } = new();
+    public virtual List<RoomReservedEntity> RoomsReserved { get; } = new();
+    public float TotalPrice { get; set; }
 }

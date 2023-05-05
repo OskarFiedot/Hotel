@@ -42,8 +42,7 @@ public class ReservationRepository : IReservationRepository
         using DatabaseContext context = _contextFactory.CreateDbContext();
 
         return await context.Reservations
-            .Include(r => r.TripDate.DateAndDuration)
-            .Include(r => r.TripDate.Trip)
+            .Include(r => r.Rooms)
             .FirstOrDefaultAsync(r => r.Id == reservationId);
     }
 
@@ -53,24 +52,80 @@ public class ReservationRepository : IReservationRepository
 
         return await context.Reservations
             .AsNoTracking()
-            .Include(r => r.TripDate.DateAndDuration)
-            .AsNoTracking()
-            .Include(r => r.TripDate.Trip)
+            .Include(r => r.Rooms)
             .AsNoTracking()
             .ToListAsync();
     }
 
-    public async Task<List<ReservationEntity>> ListByTripAsync(Guid tripId)
+    public async Task<List<ReservationEntity>> ListByDateCreatedAsync(DateTime dateCreated)
     {
         using DatabaseContext context = _contextFactory.CreateDbContext();
 
         return await context.Reservations
             .AsNoTracking()
-            .Include(r => r.TripDate.DateAndDuration)
+            .Include(r => r.Rooms)
             .AsNoTracking()
-            .Include(r => r.TripDate.Trip)
+            .Where(r => r.DateCreated == dateCreated)
+            .ToListAsync();
+    }
+
+    public async Task<List<ReservationEntity>> ListByDateUpdatedAsync(DateTime dateUpdated)
+    {
+        using DatabaseContext context = _contextFactory.CreateDbContext();
+
+        return await context.Reservations
             .AsNoTracking()
-            .Where(r => r.TripDate.TripId == tripId)
+            .Include(r => r.Rooms)
+            .AsNoTracking()
+            .Where(r => r.DateUpdated == dateUpdated)
+            .ToListAsync();
+    }
+
+    public async Task<List<ReservationEntity>> ListByEndDateAsync(DateTime endDate)
+    {
+        using DatabaseContext context = _contextFactory.CreateDbContext();
+
+        return await context.Reservations
+            .AsNoTracking()
+            .Include(r => r.Rooms)
+            .AsNoTracking()
+            .Where(r => r.EndDate == endDate)
+            .ToListAsync();
+    }
+
+    public async Task<List<ReservationEntity>> ListByHotelAsync(Guid hotelId)
+    {
+        using DatabaseContext context = _contextFactory.CreateDbContext();
+
+        return await context.Reservations
+            .AsNoTracking()
+            .Include(r => r.Rooms)
+            .AsNoTracking()
+            .Where(r => r.Rooms[0].HotelId == hotelId)
+            .ToListAsync();
+    }
+
+    public async Task<List<ReservationEntity>> ListByPriceAsync(float minPrice, float maxPrice)
+    {
+        using DatabaseContext context = _contextFactory.CreateDbContext();
+
+        return await context.Reservations
+            .AsNoTracking()
+            .Include(r => r.Rooms)
+            .AsNoTracking()
+            .Where(r => r.TotalPrice >= minPrice && r.TotalPrice <= maxPrice)
+            .ToListAsync();
+    }
+
+    public async Task<List<ReservationEntity>> ListByStartDateAsync(DateTime startDate)
+    {
+        using DatabaseContext context = _contextFactory.CreateDbContext();
+
+        return await context.Reservations
+            .AsNoTracking()
+            .Include(r => r.Rooms)
+            .AsNoTracking()
+            .Where(r => r.StartDate == startDate)
             .ToListAsync();
     }
 
@@ -80,9 +135,7 @@ public class ReservationRepository : IReservationRepository
 
         return await context.Reservations
             .AsNoTracking()
-            .Include(r => r.TripDate.DateAndDuration)
-            .AsNoTracking()
-            .Include(r => r.TripDate.Trip)
+            .Include(r => r.Rooms)
             .AsNoTracking()
             .Where(r => r.User.Contains(user))
             .ToListAsync();

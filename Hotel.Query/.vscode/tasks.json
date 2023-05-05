@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Hotel.Query.Api/Hotel.Query.Api.csproj",
+                "${workspaceFolder}/Hotel.Query.Consumer/Hotel.Query.Consumer.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/Hotel.Query.Api/Hotel.Query.Api.csproj",
+                "${workspaceFolder}/Hotel.Query.Consumer/Hotel.Query.Consumer.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/Hotel.Query.Api/Hotel.Query.Api.csproj"
+                "${workspaceFolder}/Hotel.Query.Consumer/Hotel.Query.Consumer.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

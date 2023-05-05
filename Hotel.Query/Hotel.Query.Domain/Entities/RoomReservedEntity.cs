@@ -3,18 +3,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Hotel.Query.Domain.Entities;
 
-[Table("PlaceOfDeparture")]
-public class PlaceOfDepartureEntity
+[Table("RoomReserved")]
+public class RoomReservedEntity
 {
     [Key]
     public Guid Id { get; set; }
-    public Guid CityId { get; set; }
-    public Guid TripId { get; set; }
+    public Guid RoomId { get; set; }
+    public Guid ReservationId { get; set; }
 
     [System.Text.Json.Serialization.JsonIgnore]
-    public virtual CityEntity City { get; set; } = null!;
+    public virtual RoomEntity Room { get; set; } = null!;
 
     [System.Text.Json.Serialization.JsonIgnore]
-    public virtual TripEntity Trip { get; set; } = null!;
+    public virtual ReservationEntity Reservation { get; set; } = null!;
     public float Price { get; set; }
 }

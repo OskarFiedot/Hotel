@@ -17,15 +17,11 @@ class CommandHandler : ICommandHandler
         var aggregate = new ReservationAggregate(
             command.Id,
             command.User,
-            command.TripId,
-            command.NumberOfAdults,
-            command.NumberOfChildrenUpTo3yo,
-            command.NumberOfChildrenUpTo10yo,
-            command.NumberOfChildrenUpTo18yo,
             command.StartDate,
-            command.Duration,
-            command.PlaceOfDeparture,
-            command.TotalPrice
+            command.EndDate,
+            command.TotalPrice,
+            command.Hotel,
+            command.RoomReserved
         );
 
         await _eventSourcingHandler.SaveAsync(aggregate);
@@ -35,14 +31,10 @@ class CommandHandler : ICommandHandler
     {
         var aggregate = await _eventSourcingHandler.GetByIdAsync(command.Id);
         aggregate.EditReservation(
-            command.NumberOfAdults,
-            command.NumberOfChildrenUpTo3yo,
-            command.NumberOfChildrenUpTo10yo,
-            command.NumberOfChildrenUpTo18yo,
             command.StartDate,
-            command.Duration,
-            command.PlaceOfDeparture,
-            command.TotalPrice
+            command.EndDate,
+            command.TotalPrice,
+            command.RoomReserved
         );
 
         await _eventSourcingHandler.SaveAsync(aggregate);
