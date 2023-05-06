@@ -2,6 +2,7 @@ using System.Text.Json;
 using Confluent.Kafka;
 using CQRS.Core.Events;
 using CQRS.Core.Producers;
+using Microsoft.Extensions.Options;
 
 namespace Hotel.Cmd.Infrastructure.Producers;
 
@@ -9,9 +10,9 @@ public class EventProducer : IEventProducer
 {
     private readonly ProducerConfig _config;
 
-    public EventProducer(ProducerConfig config)
+    public EventProducer(IOptions<ProducerConfig> config)
     {
-        _config = config;
+        _config = config.Value;
     }
 
     public async Task ProduceAsync<T>(string topic, T @event)

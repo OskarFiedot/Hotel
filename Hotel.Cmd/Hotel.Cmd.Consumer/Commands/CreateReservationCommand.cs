@@ -4,6 +4,9 @@ namespace Hotel.Cmd.Commands;
 
 class CreateReservationCommand : BaseCommand
 {
+    public CreateReservationCommand()
+        : base(nameof(CreateReservationCommand)) { }
+
     public string User { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }

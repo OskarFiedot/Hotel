@@ -1,6 +1,7 @@
 using CQRS.Core.Domain;
 using CQRS.Core.Events;
 using Hotel.Cmd.Infrastructure.Config;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace Hotel.Cmd.Infrastructure.Repositories;
@@ -9,12 +10,12 @@ public class EventStoreRepository : IEventStoreRepository
 {
     private readonly IMongoCollection<EventModel> _eventStoreCollection;
 
-    public EventStoreRepository(MongoDbConfig config)
+    public EventStoreRepository(IOptions<MongoDbConfig> config)
     {
-        var mongoClient = new MongoClient(config.ConnectionString);
-        var mongoDatabase = mongoClient.GetDatabase(config.Database);
+        var mongoClient = new MongoClient(config.Value.ConnectionString);
+        var mongoDatabase = mongoClient.GetDatabase(config.Value.Database);
 
-        _eventStoreCollection = mongoDatabase.GetCollection<EventModel>(config.Collection);
+        _eventStoreCollection = mongoDatabase.GetCollection<EventModel>(config.Value.Collection);
     }
 
     public async Task<List<EventModel>> FindByAggregateId(Guid aggregateId)

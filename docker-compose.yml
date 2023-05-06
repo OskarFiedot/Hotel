@@ -1,0 +1,155 @@
+version: '3.4'
+
+services:
+
+  hotel-cmd-consumer:
+    image: hotel-cmd-side
+    container_name: hotel-cmd-side
+    build:
+      context: .
+      dockerfile: Hotel.Cmd/Hotel.Cmd.Consumer/Dockerfile
+    environment:
+      - RABBIT_HOST=rabbitmq
+      - RABBIT_PORT=5672
+      - RABBIT_QUEUE=hotelCommandQueue
+      - MONGO_USER=root
+      - MONGO_PASSWORD=123
+      - MONGO_HOST=mongo
+      - MONGO_PORT=27017
+      - MONGO_DATABASE=Hotel
+      - MONGO_COLLECTION=eventStore
+      - KAFKA_HOST=kafka
+      - KAFKA_PORT=9092
+      - KAFKA_TOPIC=hotelEvents
+    restart: always
+    depends_on:
+      - mongo
+      - rabbitmq
+      - kafka
+
+  hotel-query-consumer:
+    image: hotel-query-side
+    container_name: hotel-query-consumer
+    build:
+      context: .
+      dockerfile: Hotel.Query/Hotel.Query.Consumer/Dockerfile
+    environment:
+      - RABBIT_HOST=rabbitmq
+      - RABBIT_PORT=5672
+      - RABBIT_QUEUE=hotelCommandQueue
+      - KAFKA_HOST=kafka
+      - KAFKA_PORT=9092
+      - KAFKA_TOPIC=hotelEvents
+      - KAFKA_GROUP_ID=Hotel_Consumer
+      - KAFKA_AUTO_OFFSET_RESET=Earliest
+      - KAFKA_ENABLE_AUTO_COMMIT=false
+      - KAFKA_ALLOW_AUTO_CREATE_TOPICS=true
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DATABASE=HotelDB
+    restart: always
+    depends_on:
+      - postgres
+      - rabbitmq
+      - kafka
+
+  mongo:
+    image: mongo
+    restart: always
+    container_name: mongo.service
+    hostname: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123
+    volumes:
+      - mongo_database:/data/db:rw
+    ports:
+      - "27017:27017"
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    container_name: express.service
+    hostname: express
+    ports:
+      - 30001:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: 123
+      ME_CONFIG_MONGODB_URL: mongodb://root:123@mongo:27017/
+
+  rabbitmq:
+    container_name: rabbitmq.service
+    hostname: rabbitmq
+    image: rabbitmq:3-management
+    restart: always
+    volumes:
+      - rabbit_database:/var/lib/rabbitmq:rw
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  # kafka:
+  #   image: bitnami/kafka
+  #   container_name: kafka.service
+  #   hostname: kafka
+  #   ports:
+  #     - "9092:9092"
+  #   restart: always
+  #   volumes:
+  #     - kafka_database:/bitnami:rw
+  #   environment:
+  #     - ALLOW_PLAINTEXT_LISTENER=yes
+
+  zookeeper:
+    image: bitnami/zookeeper
+    restart: always
+    ports:
+      - "2181:2181"
+    volumes:
+      - "zookeeper_database:/bitnami"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  kafka:
+    image: bitnami/kafka
+    ports:
+      - "9092:9092"
+    restart: always
+    volumes:
+      - "kafka_database:/bitnami"
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+    depends_on:
+      - zookeeper
+
+  postgres:
+    image: postgres
+    restart: always
+    container_name: postgres.service
+    hostname: postgres
+    environment:
+      POSTGRES_PASSWORD: 123
+    volumes:
+      - postgres_database:/var/lib/postgresql/data:rw
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    container_name: adminer.service
+    hostname: adminer
+    restart: always
+    ports:
+      - 30000:8080
+
+volumes:
+  mongo_database:
+  rabbit_database:
+  kafka_database:
+  postgres_database:
+  zookeeper_database:

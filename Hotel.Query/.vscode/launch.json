@@ -2,32 +2,42 @@
     "version": "0.2.0",
     "configurations": [
         {
-            // Use IntelliSense to find out which attributes exist for C# debugging
-            // Use hover for the description of the existing attributes
-            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
             "name": ".NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/Hotel.Query.Consumer/bin/Debug/net7.0/Hotel.Query.Consumer.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Hotel.Query.Consumer",
-            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false,
             "env": {
-                "KAFKA_TOPIC": "HotelReservationEvents",
                 "POSTGRES_HOST": "localhost",
                 "POSTGRES_USER": "postgres",
                 "POSTGRES_PASSWORD": "123",
-                "POSTGRES_DATABASE": "HotelDB"
+                "POSTGRES_DATABASE": "HotelDB",
+                "KAFKA_GROUP_ID": "Hotel_Consumer",
+                "KAFKA_HOST": "localhost",
+                "KAFKA_PORT": "9092",
+                "KAFKA_AUTO_OFFSET_RESET": "Earliest",
+                "KAFKA_ENABLE_AUTO_COMMIT": "false",
+                "KAFKA_ALLOW_AUTO_CREATE_TOPICS": "true",
+                "KAFKA_TOPIC": "hotelEvents"
             }
         },
         {
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"
+        },
+        {
+            "name": "Docker .NET Launch",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/Hotel.Query.Consumer/Hotel.Query.Consumer.csproj"
+            }
         }
     ]
 }

@@ -4,6 +4,9 @@ namespace Hotel.Cmd.Commands;
 
 class EditReservationCommand : BaseCommand
 {
+    public EditReservationCommand()
+        : base(nameof(EditReservationCommand)) { }
+
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public float TotalPrice { get; set; }
