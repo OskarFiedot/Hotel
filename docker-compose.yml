@@ -8,6 +8,8 @@ services:
     build:
       context: .
       dockerfile: Hotel.Cmd/Hotel.Cmd.Consumer/Dockerfile
+    tty: true
+    stdin_open: true
     environment:
       - RABBIT_HOST=rabbitmq
       - RABBIT_PORT=5672
@@ -33,6 +35,8 @@ services:
     build:
       context: .
       dockerfile: Hotel.Query/Hotel.Query.Consumer/Dockerfile
+    tty: true
+    stdin_open: true
     environment:
       - RABBIT_HOST=rabbitmq
       - RABBIT_PORT=5672
@@ -57,7 +61,7 @@ services:
   mongo:
     image: mongo
     restart: always
-    container_name: mongo.service
+    container_name: mongo
     hostname: mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
@@ -70,7 +74,7 @@ services:
   mongo-express:
     image: mongo-express
     restart: always
-    container_name: express.service
+    container_name: express
     hostname: express
     ports:
       - 30001:8081
@@ -80,7 +84,7 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://root:123@mongo:27017/
 
   rabbitmq:
-    container_name: rabbitmq.service
+    container_name: rabbitmq
     hostname: rabbitmq
     image: rabbitmq:3-management
     restart: always
@@ -92,7 +96,7 @@ services:
 
   # kafka:
   #   image: bitnami/kafka
-  #   container_name: kafka.service
+  #   container_name: kafka
   #   hostname: kafka
   #   ports:
   #     - "9092:9092"
@@ -113,6 +117,8 @@ services:
       - ALLOW_ANONYMOUS_LOGIN=yes
 
   kafka:
+    container_name: kafka
+    hostname: kafka
     image: bitnami/kafka
     ports:
       - "9092:9092"
@@ -130,7 +136,7 @@ services:
   postgres:
     image: postgres
     restart: always
-    container_name: postgres.service
+    container_name: postgres
     hostname: postgres
     environment:
       POSTGRES_PASSWORD: 123
@@ -141,7 +147,7 @@ services:
 
   adminer:
     image: adminer
-    container_name: adminer.service
+    container_name: adminer
     hostname: adminer
     restart: always
     ports:

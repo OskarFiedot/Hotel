@@ -53,6 +53,8 @@ public class CommandConsumer : ICommandConsumer
             byte[] body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
 
+            System.Console.WriteLine($"{message}");
+
             var options = new JsonSerializerOptions { Converters = { new CommandJsonConverter() } };
             var command = JsonSerializer.Deserialize<BaseCommand>(message, options);
 
@@ -63,6 +65,7 @@ public class CommandConsumer : ICommandConsumer
 
         channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
 
-        while (true) { }
+        Console.WriteLine(" Press [enter] to exit.");
+        Console.ReadLine();
     }
 }
