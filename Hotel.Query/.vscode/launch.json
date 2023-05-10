@@ -18,7 +18,7 @@
                 "POSTGRES_DATABASE": "HotelDB",
                 "KAFKA_GROUP_ID": "Hotel_Consumer",
                 "KAFKA_HOST": "localhost",
-                "KAFKA_PORT": "9092",
+                "KAFKA_PORT": "19092",
                 "KAFKA_AUTO_OFFSET_RESET": "Earliest",
                 "KAFKA_ENABLE_AUTO_COMMIT": "false",
                 "KAFKA_ALLOW_AUTO_CREATE_TOPICS": "true",

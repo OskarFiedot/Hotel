@@ -20,14 +20,14 @@ services:
       - MONGO_PORT=27017
       - MONGO_DATABASE=Hotel
       - MONGO_COLLECTION=eventStore
-      - KAFKA_HOST=kafka
+      - KAFKA_HOST=broker
       - KAFKA_PORT=9092
       - KAFKA_TOPIC=hotelEvents
     restart: always
     depends_on:
       - mongo
       - rabbitmq
-      - kafka
+      - broker
 
   hotel-query-consumer:
     image: hotel-query-side
@@ -41,7 +41,7 @@ services:
       - RABBIT_HOST=rabbitmq
       - RABBIT_PORT=5672
       - RABBIT_QUEUE=hotelCommandQueue
-      - KAFKA_HOST=kafka
+      - KAFKA_HOST=broker
       - KAFKA_PORT=9092
       - KAFKA_TOPIC=hotelEvents
       - KAFKA_GROUP_ID=Hotel_Consumer
@@ -56,7 +56,7 @@ services:
     depends_on:
       - postgres
       - rabbitmq
-      - kafka
+      - broker
 
   mongo:
     image: mongo
@@ -64,8 +64,8 @@ services:
     container_name: mongo
     hostname: mongo
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: 123
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123
     volumes:
       - mongo_database:/data/db:rw
     ports:
@@ -79,9 +79,9 @@ services:
     ports:
       - 30001:8081
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: 123
-      ME_CONFIG_MONGODB_URL: mongodb://root:123@mongo:27017/
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=123
+      - ME_CONFIG_MONGODB_URL=mongodb://root:123@mongo:27017/
 
   rabbitmq:
     container_name: rabbitmq
@@ -94,44 +94,26 @@ services:
       - "5672:5672"
       - "15672:15672"
 
-  # kafka:
-  #   image: bitnami/kafka
-  #   container_name: kafka
-  #   hostname: kafka
-  #   ports:
-  #     - "9092:9092"
-  #   restart: always
-  #   volumes:
-  #     - kafka_database:/bitnami:rw
-  #   environment:
-  #     - ALLOW_PLAINTEXT_LISTENER=yes
-
   zookeeper:
-    image: bitnami/zookeeper
+    image: confluentinc/cp-zookeeper:5.5.0
+    container_name: zookeeper
+    hostname: zookeeper
     restart: always
-    ports:
-      - "2181:2181"
-    volumes:
-      - "zookeeper_database:/bitnami"
     environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
+      - ZOOKEEPER_CLIENT_PORT=2181
 
-  kafka:
-    container_name: kafka
-    hostname: kafka
-    image: bitnami/kafka
-    ports:
-      - "9092:9092"
+  broker:
+    image: confluentinc/cp-kafka:5.5.0
+    container_name: broker
+    hostname: broker
     restart: always
-    volumes:
-      - "kafka_database:/bitnami"
-    environment:
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
-      - ALLOW_PLAINTEXT_LISTENER=yes
-      - KAFKA_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
     depends_on:
       - zookeeper
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://broker:9092
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
 
   postgres:
     image: postgres
@@ -156,6 +138,4 @@ services:
 volumes:
   mongo_database:
   rabbit_database:
-  kafka_database:
   postgres_database:
-  zookeeper_database:
