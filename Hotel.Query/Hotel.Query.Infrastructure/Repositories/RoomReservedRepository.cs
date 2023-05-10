@@ -60,20 +60,6 @@ public class RoomReservedRepository : IRoomReservedRepository
             .ToListAsync();
     }
 
-    public async Task<List<RoomReservedEntity>> ListByPriceAsync(float minPrice, float maxPrice)
-    {
-        using DatabaseContext context = _contextFactory.CreateDbContext();
-
-        return await context.RoomReserved
-            .AsNoTracking()
-            .Include(rr => rr.Room)
-            .AsNoTracking()
-            .Include(rr => rr.Reservation)
-            .AsNoTracking()
-            .Where(rr => rr.Price >= minPrice && rr.Price <= maxPrice)
-            .ToListAsync();
-    }
-
     public async Task<List<RoomReservedEntity>> ListByRoomAsync(Guid roomId)
     {
         using DatabaseContext context = _contextFactory.CreateDbContext();
@@ -108,5 +94,18 @@ public class RoomReservedRepository : IRoomReservedRepository
         context.RoomReserved.Update(roomReserved);
 
         _ = await context.SaveChangesAsync();
+    }
+
+    public async Task<RoomReservedEntity> GetByRoomAndReservationAsync(
+        Guid roomId,
+        Guid reservationId
+    )
+    {
+        using DatabaseContext context = _contextFactory.CreateDbContext();
+
+        return await context.RoomReserved
+            .Include(rr => rr.Room)
+            .Include(rr => rr.Reservation)
+            .FirstOrDefaultAsync(rr => rr.RoomId == roomId && rr.ReservationId == reservationId);
     }
 }

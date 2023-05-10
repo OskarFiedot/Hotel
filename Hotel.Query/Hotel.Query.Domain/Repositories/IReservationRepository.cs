@@ -11,9 +11,7 @@ public interface IReservationRepository
     Task<List<ReservationEntity>> ListAllAsync();
     Task<List<ReservationEntity>> ListByUserAsync(string user);
     Task<List<ReservationEntity>> ListByHotelAsync(Guid hotelId);
-    Task<List<ReservationEntity>> ListByStartDateAsync(DateTime startDate);
-    Task<List<ReservationEntity>> ListByEndDateAsync(DateTime endDate);
-    Task<List<ReservationEntity>> ListByDateCreatedAsync(DateTime dateCreated);
-    Task<List<ReservationEntity>> ListByDateUpdatedAsync(DateTime dateUpdated);
+    Task<List<ReservationEntity>> ListByStartDateAsync(DateOnly startDate);
+    Task<List<ReservationEntity>> ListByEndDateAsync(DateOnly endDate);
     Task<List<ReservationEntity>> ListByPriceAsync(float minPrice, float maxPrice);
 }

@@ -16,5 +16,4 @@ public class RoomReservedEntity
 
     [System.Text.Json.Serialization.JsonIgnore]
     public virtual ReservationEntity Reservation { get; set; } = null!;
-    public float Price { get; set; }
 }

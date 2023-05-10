@@ -17,7 +17,6 @@ public class RoomEntity
 
     [System.Text.Json.Serialization.JsonIgnore]
     public virtual RoomTypeEntity RoomType { get; set; } = null!;
-    public virtual List<ReservationEntity> Reservations { get; } = new();
     public virtual List<RoomReservedEntity> RoomsReserved { get; } = new();
     public float Price { get; set; }
 }
