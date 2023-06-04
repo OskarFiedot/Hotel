@@ -1,10 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using CQRS.Core.Entities;
 
 namespace Hotel.Query.Domain.Entities;
 
 [Table("RoomType")]
-public class RoomTypeEntity
+public class RoomTypeEntity : BaseEntity
 {
     [Key]
     public Guid Id { get; set; }

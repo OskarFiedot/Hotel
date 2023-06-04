@@ -30,7 +30,7 @@ public class EventStore : IEventStore
         return eventStream.OrderBy(x => x.Version).Select(x => x.EventData).ToList();
     }
 
-    public async Task SaveEventsAsync(
+    public async Task<int> SaveEventsAsync(
         Guid aggregateId,
         IEnumerable<BaseEvent> events,
         int expectedVersion
@@ -65,5 +65,7 @@ public class EventStore : IEventStore
             var topic = Environment.GetEnvironmentVariable("KAFKA_TOPIC");
             await _eventProducer.ProduceAsync(topic, @event);
         }
+
+        return version;
     }
 }

@@ -32,7 +32,12 @@ public class EventSourcingHandler : IEventSourcingHandler<ReservationAggregate>
 
     public async Task SaveAsync(AggregateRoot aggregate)
     {
-        await _eventStore.SaveEventsAsync(aggregate.Id, aggregate.Changes, aggregate.Version);
+        int version = await _eventStore.SaveEventsAsync(
+            aggregate.Id,
+            aggregate.Changes,
+            aggregate.Version
+        );
         aggregate.MarkChangesAsCommited();
+        aggregate.Version = version;
     }
 }

@@ -85,12 +85,12 @@ public class EventHandler : IEventHandler
         {
             if (!@event.RoomReserved.Contains(roomId))
             {
-                var roomReserved = await _roomReservedRepository.GetByRoomAndReservationAsync(
-                    roomId,
-                    reservation.Id
-                );
+                RoomReservedEntity roomReserved = reservation.RoomsReserved
+                    .Where(r => r.RoomId == roomId)
+                    .First();
 
                 reservation.RoomsReserved.Remove(roomReserved);
+                await _roomReservedRepository.DeleteAsync(roomReserved.Id);
             }
         }
 

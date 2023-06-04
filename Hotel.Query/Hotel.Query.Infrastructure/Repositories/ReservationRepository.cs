@@ -42,7 +42,8 @@ public class ReservationRepository : IReservationRepository
         using DatabaseContext context = _contextFactory.CreateDbContext();
 
         return await context.Reservations
-            .Include(r => r.RoomsReserved.Select(r => r.Room))
+            .Include(r => r.RoomsReserved)
+            .ThenInclude(r => r.Room)
             .FirstOrDefaultAsync(r => r.Id == reservationId);
     }
 
@@ -52,7 +53,8 @@ public class ReservationRepository : IReservationRepository
 
         return await context.Reservations
             .AsNoTracking()
-            .Include(r => r.RoomsReserved.Select(r => r.Room))
+            .Include(r => r.RoomsReserved)
+            .ThenInclude(r => r.Room)
             .AsNoTracking()
             .ToListAsync();
     }
@@ -63,7 +65,8 @@ public class ReservationRepository : IReservationRepository
 
         return await context.Reservations
             .AsNoTracking()
-            .Include(r => r.RoomsReserved.Select(r => r.Room))
+            .Include(r => r.RoomsReserved)
+            .ThenInclude(r => r.Room)
             .AsNoTracking()
             .Where(r => r.EndDate == endDate)
             .ToListAsync();
@@ -75,7 +78,8 @@ public class ReservationRepository : IReservationRepository
 
         return await context.Reservations
             .AsNoTracking()
-            .Include(r => r.RoomsReserved.Select(r => r.Room))
+            .Include(r => r.RoomsReserved)
+            .ThenInclude(r => r.Room)
             .AsNoTracking()
             .Where(r => r.RoomsReserved[0].Room.HotelId == hotelId)
             .ToListAsync();
@@ -87,9 +91,23 @@ public class ReservationRepository : IReservationRepository
 
         return await context.Reservations
             .AsNoTracking()
-            .Include(r => r.RoomsReserved.Select(r => r.Room))
+            .Include(r => r.RoomsReserved)
+            .ThenInclude(r => r.Room)
             .AsNoTracking()
             .Where(r => r.TotalPrice >= minPrice && r.TotalPrice <= maxPrice)
+            .ToListAsync();
+    }
+
+    public async Task<List<ReservationEntity>> ListByRoomAsync(Guid roomId)
+    {
+        using DatabaseContext context = _contextFactory.CreateDbContext();
+
+        return await context.Reservations
+            .AsNoTracking()
+            .Include(r => r.RoomsReserved)
+            .ThenInclude(r => r.Room)
+            .AsNoTracking()
+            .Where(r => r.RoomsReserved.Any(r => r.RoomId == roomId))
             .ToListAsync();
     }
 
@@ -99,7 +117,8 @@ public class ReservationRepository : IReservationRepository
 
         return await context.Reservations
             .AsNoTracking()
-            .Include(r => r.RoomsReserved.Select(r => r.Room))
+            .Include(r => r.RoomsReserved)
+            .ThenInclude(r => r.Room)
             .AsNoTracking()
             .Where(r => r.StartDate == startDate)
             .ToListAsync();
@@ -111,7 +130,8 @@ public class ReservationRepository : IReservationRepository
 
         return await context.Reservations
             .AsNoTracking()
-            .Include(r => r.RoomsReserved.Select(r => r.Room))
+            .Include(r => r.RoomsReserved)
+            .ThenInclude(r => r.Room)
             .AsNoTracking()
             .Where(r => r.User.Contains(user))
             .ToListAsync();
