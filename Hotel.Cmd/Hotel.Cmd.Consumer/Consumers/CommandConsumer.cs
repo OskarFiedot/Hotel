@@ -4,10 +4,10 @@ using RabbitMQ.Client.Events;
 using CQRS.Core.Consumers;
 using CQRS.Core.Infrastructure;
 using System.Text.Json;
-using Hotel.Query.Infrastructure.Converters;
+using Hotel.Cmd.Consumer.Converters;
 using CQRS.Core.Commands;
 
-namespace Hotel.Cmd.Commands.Consumers;
+namespace Hotel.Cmd.Consumer.Consumers;
 
 public class CommandConsumer : ICommandConsumer
 {

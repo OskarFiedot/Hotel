@@ -12,6 +12,9 @@
             "console": "internalConsole",
             "stopAtEntry": false,
             "env": {
+                "RABBIT_HOST": "localhost",
+                "RABBIT_PORT": "5672",
+                "RABBIT_QUEUE": "hotelQueryQueue",
                 "POSTGRES_HOST": "localhost",
                 "POSTGRES_USER": "postgres",
                 "POSTGRES_PASSWORD": "123",

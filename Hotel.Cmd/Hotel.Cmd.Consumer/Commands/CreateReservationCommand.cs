@@ -1,6 +1,6 @@
 using CQRS.Core.Commands;
 
-namespace Hotel.Cmd.Commands;
+namespace Hotel.Cmd.Consumer.Commands;
 
 class CreateReservationCommand : BaseCommand
 {

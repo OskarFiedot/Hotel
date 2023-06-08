@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using CQRS.Core.Entities;
 
 namespace Hotel.Query.Domain.Entities;
 
 [Table("Room")]
-public class RoomEntity : BaseEntity
+public class RoomEntity
 {
     [Key]
     public Guid Id { get; set; }
@@ -18,6 +17,8 @@ public class RoomEntity : BaseEntity
 
     [System.Text.Json.Serialization.JsonIgnore]
     public virtual RoomTypeEntity RoomType { get; set; } = null!;
+
+    [System.Text.Json.Serialization.JsonIgnore]
     public virtual List<RoomReservedEntity> RoomsReserved { get; } = new();
     public float Price { get; set; }
 }

@@ -1,7 +1,7 @@
 using CQRS.Core.Handlers;
 using Hotel.Cmd.Domain.Aggregates;
 
-namespace Hotel.Cmd.Commands;
+namespace Hotel.Cmd.Consumer.Commands;
 
 class CommandHandler : ICommandHandler
 {

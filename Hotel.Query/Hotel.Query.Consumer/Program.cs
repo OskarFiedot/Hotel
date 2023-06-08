@@ -9,8 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Hotel.Query.Domain.Repositories;
 using CQRS.Core.Consumers;
 using Hotel.Query.Consumer.Queries;
-using Hotel.Query.Infrastructure.Dispatchers;
-using CQRS.Core.Entities;
+using Hotel.Query.Consumer.Consumers;
 
 string GetEnv(string envName)
 {
@@ -101,12 +100,10 @@ builder.ConfigureServices(services =>
     services.AddScoped<IEventHandler, Hotel.Query.Infrastructure.Handlers.EventHandler>();
     services.Configure<ConsumerConfig>(configureConsumer);
     services.AddScoped<IEventConsumer, EventConsumer>();
-
-    var queryHandler = services.BuildServiceProvider().GetRequiredService<IQueryHandler>();
-    var dispatcher = new QueryDispatcher();
-    // dispatcher.RegisterHandler<FindAllCitiesQuery>(queryHandler.HandleAsync);
+    services.AddScoped<IQueryConsumer, QueryConsumer>();
 
     services.AddHostedService<EventConsumerHostedService>();
+    services.AddHostedService<QueryConsumerHostedService>();
 });
 
 using var host = builder.Build();

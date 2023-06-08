@@ -1,9 +1,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using CQRS.Core.Commands;
-using Hotel.Cmd.Commands;
+using Hotel.Cmd.Consumer.Commands;
 
-namespace Hotel.Query.Infrastructure.Converters;
+namespace Hotel.Cmd.Consumer.Converters;
 
 public class CommandJsonConverter : JsonConverter<BaseCommand>
 {

@@ -1,4 +1,4 @@
-namespace Hotel.Cmd.Commands;
+namespace Hotel.Cmd.Consumer.Commands;
 
 interface ICommandHandler
 {

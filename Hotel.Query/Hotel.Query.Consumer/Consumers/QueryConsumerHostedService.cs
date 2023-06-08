@@ -3,15 +3,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Hotel.Cmd.Consumer.Consumers;
+namespace Hotel.Query.Consumer.Consumers;
 
-public class CommandConsumerHostedService : IHostedService
+public class QueryConsumerHostedService : IHostedService
 {
-    private readonly ILogger<CommandConsumerHostedService> _logger;
+    private readonly ILogger<QueryConsumerHostedService> _logger;
     private readonly IServiceProvider _serviceProvider;
 
-    public CommandConsumerHostedService(
-        ILogger<CommandConsumerHostedService> logger,
+    public QueryConsumerHostedService(
+        ILogger<QueryConsumerHostedService> logger,
         IServiceProvider serviceProvider
     )
     {
@@ -21,21 +21,21 @@ public class CommandConsumerHostedService : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Command consumer service running.");
+        _logger.LogInformation("Query consumer service running.");
 
         using IServiceScope scope = _serviceProvider.CreateScope();
 
-        var commandConsumer = scope.ServiceProvider.GetRequiredService<ICommandConsumer>();
+        var queryConsumer = scope.ServiceProvider.GetRequiredService<IQueryConsumer>();
         var queue = Environment.GetEnvironmentVariable("RABBIT_QUEUE");
 
-        Task.Run(() => commandConsumer.Consume(queue), cancellationToken);
+        Task.Run(() => queryConsumer.Consume(queue), cancellationToken);
 
         return Task.CompletedTask;
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Command consumer service stopped.");
+        _logger.LogInformation("Query consumer service stopped.");
 
         return Task.CompletedTask;
     }

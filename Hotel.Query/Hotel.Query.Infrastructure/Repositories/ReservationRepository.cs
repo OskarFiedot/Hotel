@@ -81,7 +81,7 @@ public class ReservationRepository : IReservationRepository
             .Include(r => r.RoomsReserved)
             .ThenInclude(r => r.Room)
             .AsNoTracking()
-            .Where(r => r.RoomsReserved[0].Room.HotelId == hotelId)
+            .Where(r => r.RoomsReserved.Any(r => r.Room.HotelId == hotelId))
             .ToListAsync();
     }
 
